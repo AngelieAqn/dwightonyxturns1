@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth overflow-x-hidden">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Dwight Onyx's Christening & 1st Birthday Rodeo</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Special+Elite&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cowboy: {
+                            red: '#8A1C1C',
+                            darkred: '#5C0F0F',
+                            brown: '#3E2723',
+                            lightbrown: '#5D4037',
+                            tan: '#C68B59',
+                            gold: '#D4AF37',
+                            parchment: '#FDFBF7',
+                            darkparchment: '#F3ECDC',
+                            denim: '#2C4D6F'
+                        }
+                    },
+                    fontFamily: {
+                        western: ['Rye', 'serif'],
+                        typewriter: ['Special Elite', 'monospace'],
+                        sans: ['Montserrat', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            touch-action: manipulation;
+        }
+
+        body {
+            background-color: #1E120B;
+            background-image: 
+                radial-gradient(#3E2723 1px, transparent 1px),
+                linear-gradient(to bottom, #1E120B, #2A170E);
+            background-size: 24px 24px, 100% 100%;
+            color: #3E2723;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        .parchment-bg {
+            background-color: #FDFBF7;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(253, 251, 247, 0.98), rgba(243, 236, 220, 0.95)),
+                url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.07'/%3E%3C/svg%3E");
+            box-shadow: inset 0 0 60px rgba(62, 39, 35, 0.12), 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .wood-card {
+            background: linear-gradient(135deg, #4A2E19 0%, #3E2723 50%, #2A1A0A 100%);
+            border: 3px solid #C68B59;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.45), inset 0 0 15px rgba(0,0,0,0.6);
+        }
+
+        .bandana-border-top {
+            background: repeating-linear-gradient(
+                45deg,
+                #8A1C1C,
+                #8A1C1C 12px,
+                #FDFBF7 12px,
+                #FDFBF7 14px,
+                #8A1C1C 14px,
+                #8A1C1C 26px
+            );
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1E120B;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #8A1C1C;
+            border-radius: 4px;
+            border: 1px solid #C68B59;
+        }
+
+        .polaroid {
+            background: #FFFFFF;
+            padding: 10px 10px 32px 10px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .polaroid:hover, .polaroid:active {
+            transform: scale(1.03) rotate(0deg) !important;
+            z-index: 20;
+            box-shadow: 0 12px 24px rgba(0,0,0,0.28);
+        }
+
+        .envelope-wrapper {
+            perspective: 1000px;
+        }
+
+        .stamp-glow {
+            animation: pulse-glow 2.5s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
+            50% { box-shadow: 0 0 25px rgba(212, 175, 55, 0.8); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, ::before, ::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+<body class="font-sans antialiased relative selection:bg-cowboy-red selection:text-white w-full overflow-x-hidden">
+
+    <!-- FLOATING AUDIO PLAYER BUTTON -->
+    <div class="fixed bottom-4 left-4 z-40">
+        <button id="audio-toggle-btn" class="bg-cowboy-red hover:bg-cowboy-darkred text-white p-3 sm:p-4 rounded-full shadow-2xl border-2 border-cowboy-gold flex items-center justify-center transition-all duration-300 transform active:scale-95 focus:outline-none min-w-[48px] min-h-[48px]" title="Play Chattahoochee by Alan Jackson" aria-label="Toggle background music">
+            <i id="audio-icon" class="fas fa-music text-lg sm:text-2xl"></i>
+            <span class="hidden sm:inline-block max-w-0 overflow-hidden whitespace-nowrap group-hover:max-w-xs transition-all duration-500 ease-in-out text-xs font-western ml-0 group-hover:ml-2">Play Chattahoochee 🎸</span>
+        </button>
+        <audio id="bg-audio" loop preload="auto">
+            <source src="music.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <!-- ENVELOPE OPENING OVERLAY -->
+    <div id="envelope-overlay" class="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/95 p-3 sm:p-6 backdrop-blur-md transition-opacity duration-700">
+        <div class="envelope-wrapper w-full max-w-md mx-auto text-center">
+            <div id="envelope-card" class="relative bg-[#3E2723] rounded-2xl border-4 border-cowboy-gold p-6 sm:p-8 shadow-2xl text-amber-50 overflow-hidden cursor-pointer active:scale-98 transition transform" onclick="openEnvelope()">
+                
+                <div class="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-4 bg-cowboy-red rounded-full border-4 border-cowboy-gold flex items-center justify-center stamp-glow shadow-xl transform group-hover:scale-105">
+                    <i class="fas fa-hat-cowboy text-cowboy-gold text-3xl sm:text-4xl"></i>
+                </div>
+
+                <span class="inline-block px-3 py-1 bg-cowboy-gold/20 text-cowboy-gold border border-cowboy-gold/40 rounded-full font-western text-[10px] sm:text-xs tracking-widest uppercase mb-3">
+                    You're Invited!
+                </span>
+
+                <h2 class="font-western text-2xl sm:text-3xl text-yellow-100 uppercase tracking-wide leading-tight">
+                    Dwight Onyx's
+                </h2>
+                <p class="font-serif italic text-cowboy-tan text-sm sm:text-base mt-1">
+                    1st Birthday & Christening
+                </p>
+
+                <p class="font-typewriter text-xs text-stone-300 mt-4 bg-black/30 p-3 rounded-lg border border-cowboy-tan/30">
+                    <i class="fas fa-hand-pointer text-cowboy-gold mr-1 animate-bounce"></i> Tap anywhere to unseal the invitation
+                </p>
+
+                <div class="mt-4 pt-3 border-t border-cowboy-tan/30 flex justify-between items-center text-[11px] font-western text-cowboy-gold">
+                    <span>NOV 21, 2026</span>
+                    <span>APARRI, CAGAYAN</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN INVITATION CONTAINER -->
+    <div id="main-invitation" class="max-w-4xl mx-auto my-0 sm:my-6 md:my-10 parchment-bg rounded-none sm:rounded-3xl border-0 sm:border-4 md:border-8 border-cowboy-brown relative overflow-hidden w-full px-0">
+
+        <!-- Red Bandana Top Trim -->
+        <div class="h-3 sm:h-4 bandana-border-top w-full"></div>
+
+        <!-- Header Rope & Star Line Decorative -->
+        <div class="flex justify-between items-center px-4 sm:px-6 pt-4 sm:pt-6">
+            <i class="fas fa-star text-cowboy-gold text-lg sm:text-2xl animate-spin" style="animation-duration: 16s;"></i>
+            <div class="h-0.5 bg-cowboy-tan flex-grow mx-2 sm:mx-4 opacity-40"></div>
+            <span class="font-western text-cowboy-red text-[11px] sm:text-sm tracking-widest uppercase text-center">Official Invitation</span>
+            <div class="h-0.5 bg-cowboy-tan flex-grow mx-2 sm:mx-4 opacity-40"></div>
+            <i class="fas fa-star text-cowboy-gold text-lg sm:text-2xl animate-spin" style="animation-duration: 16s;"></i>
+        </div>
+
+        <!-- HERO / COVER SECTION -->
+        <section class="text-center px-3 sm:px-6 py-6 sm:py-10 relative">
+            <div class="inline-block px-4 py-1 bg-cowboy-red text-white font-western text-[11px] sm:text-xs rounded-full uppercase tracking-widest mb-4 shadow-md transform -rotate-1">
+                🌵 Howdy Family & Friends! 🌵
+            </div>
+
+            <div class="relative bg-cowboy-darkparchment p-4 sm:p-8 rounded-2xl border-2 sm:border-4 border-cowboy-brown max-w-2xl mx-auto my-2 sm:my-4 shadow-inner">
+                <i class="fas fa-star text-cowboy-gold text-lg sm:text-2xl absolute -top-2.5 -left-2.5 drop-shadow"></i>
+                <i class="fas fa-star text-cowboy-gold text-lg sm:text-2xl absolute -top-2.5 -right-2.5 drop-shadow"></i>
+                <i class="fas fa-star text-cowboy-gold text-lg sm:text-2xl absolute -bottom-2.5 -left-2.5 drop-shadow"></i>
+                <i class="fas fa-star text-cowboy-gold text-lg sm:text-2xl absolute -bottom-2.5 -right-2.5 drop-shadow"></i>
+
+                <p class="font-western text-cowboy-tan text-xs sm:text-base uppercase tracking-widest mb-1">Two Special Milestones, One Celebration</p>
+
+                <h1 class="font-western text-3xl sm:text-5xl md:text-7xl text-cowboy-red tracking-wide drop-shadow-md my-2 leading-tight">
+                    DWIGHT ONYX
+                </h1>
+
+                <div class="flex items-center justify-center gap-2 sm:gap-3 my-2 sm:my-3">
+                    <span class="h-0.5 w-6 sm:w-10 bg-cowboy-red rounded"></span>
+                    <p class="font-serif italic text-cowboy-brown text-base sm:text-xl font-semibold">1st Birthday & Christening</p>
+                    <span class="h-0.5 w-6 sm:w-10 bg-cowboy-red rounded"></span>
+                </div>
+
+                <p class="font-typewriter text-cowboy-brown text-xs sm:text-base leading-relaxed max-w-md mx-auto my-3 sm:my-4">
+                    "Join us as we celebrate our little cowboy's first birthday and christening. Saddle up for a day filled with love, joy, and unforgettable memories!"
+                </p>
+
+                <div class="mt-4 sm:mt-6 inline-block wood-card px-5 sm:px-8 py-3 sm:py-4 rounded-xl text-white transform hover:scale-105 transition max-w-full">
+                    <div class="text-cowboy-gold font-western text-[10px] sm:text-xs tracking-widest uppercase">Save The Date</div>
+                    <div class="font-western text-xl sm:text-3xl text-yellow-100 my-1 leading-tight">SATURDAY, NOV 21, 2026</div>
+                    <div class="text-[11px] sm:text-xs font-typewriter text-gray-300 uppercase tracking-wider">Aparri, Cagayan</div>
+                </div>
+            </div>
+
+            <!-- COUNTDOWN TIMER -->
+            <div class="mt-6 sm:mt-10 max-w-xl mx-auto">
+                <h3 class="font-western text-cowboy-brown text-xs sm:text-base mb-3 uppercase tracking-wider">
+                    <i class="fas fa-hourglass-start text-cowboy-red mr-1.5"></i>Countdown to the Big Rodeo
+                </h3>
+                <div class="grid grid-cols-4 gap-1.5 sm:gap-4 px-1 sm:px-2">
+                    <div class="bg-cowboy-brown text-white p-2 sm:p-3 rounded-lg sm:rounded-xl border-2 border-cowboy-tan shadow">
+                        <span id="days" class="block font-western text-xl sm:text-4xl text-cowboy-gold leading-tight">00</span>
+                        <span class="text-[9px] sm:text-xs font-typewriter uppercase tracking-wider text-gray-300">Days</span>
+                    </div>
+                    <div class="bg-cowboy-brown text-white p-2 sm:p-3 rounded-lg sm:rounded-xl border-2 border-cowboy-tan shadow">
+                        <span id="hours" class="block font-western text-xl sm:text-4xl text-cowboy-gold leading-tight">00</span>
+                        <span class="text-[9px] sm:text-xs font-typewriter uppercase tracking-wider text-gray-300">Hours</span>
+                    </div>
+                    <div class="bg-cowboy-brown text-white p-2 sm:p-3 rounded-lg sm:rounded-xl border-2 border-cowboy-tan shadow">
+                        <span id="minutes" class="block font-western text-xl sm:text-4xl text-cowboy-gold leading-tight">00</span>
+                        <span class="text-[9px] sm:text-xs font-typewriter uppercase tracking-wider text-gray-300">Mins</span>
+                    </div>
+                    <div class="bg-cowboy-brown text-white p-2 sm:p-3 rounded-lg sm:rounded-xl border-2 border-cowboy-tan shadow">
+                        <span id="seconds" class="block font-western text-xl sm:text-4xl text-cowboy-gold leading-tight">00</span>
+                        <span class="text-[9px] sm:text-xs font-typewriter uppercase tracking-wider text-gray-300">Secs</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mt-6 sm:mt-8 max-w-md mx-auto">
+                <a href="#rsvp" class="bg-cowboy-red hover:bg-cowboy-darkred active:scale-95 text-white font-western px-6 py-3.5 rounded-xl shadow-lg border-2 border-cowboy-gold transition flex items-center justify-center gap-2 text-sm min-h-[48px]">
+                    <i class="fas fa-check-circle"></i> RSVP Now
+                </a>
+                <a href="#details" class="bg-cowboy-tan hover:bg-cowboy-brown active:scale-95 text-white font-western px-6 py-3.5 rounded-xl shadow-lg border-2 border-cowboy-brown transition flex items-center justify-center gap-2 text-sm min-h-[48px]">
+                    <i class="fas fa-map-location-dot"></i> Event Details
+                </a>
+            </div>
+        </section>
+
+        <!-- EVENT DETAILS & TIMELINE SECTION -->
+        <section id="details" class="px-3 sm:px-6 py-8 sm:py-12 bg-cowboy-darkparchment/60 border-y-2 border-cowboy-tan/40">
+            <div class="text-center mb-8">
+                <h2 class="font-western text-2xl sm:text-4xl text-cowboy-red uppercase flex items-center justify-center gap-2">
+                    <i class="fas fa-hat-cowboy text-cowboy-tan text-xl sm:text-3xl"></i> Where & When
+                </h2>
+                <p class="font-typewriter text-cowboy-brown text-xs sm:text-sm mt-1">Here's the trail map for our special celebration on November 21, 2026!</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-5 max-w-4xl mx-auto mb-10">
+                <!-- Christening Card -->
+                <div class="bg-white p-5 rounded-2xl border-2 border-cowboy-tan shadow-md hover:shadow-xl transition flex flex-col justify-between relative">
+                    <div>
+                        <div class="absolute -top-3 left-4 bg-cowboy-red text-white font-western text-[10px] sm:text-[11px] px-3 py-1 rounded-full uppercase shadow">
+                            Part 1: Christening
+                        </div>
+                        <div class="text-center pt-3">
+                            <div class="w-12 h-12 mx-auto rounded-full bg-amber-100 text-cowboy-red flex items-center justify-center text-xl mb-2">
+                                <i class="fas fa-church"></i>
+                            </div>
+                            <h3 class="font-western text-base sm:text-lg text-cowboy-brown">St. Peter Thelmo Parish</h3>
+                            <p class="font-typewriter text-xs text-cowboy-red font-bold my-1.5"><i class="far fa-clock mr-1"></i> 10:00 AM</p>
+                            <p class="text-xs text-gray-600 font-sans leading-relaxed">Brgy. Centro 1, Aparri, Cagayan</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-dashed border-gray-200 text-center">
+                        <a href="https://www.google.com/maps/search/?api=1&query=St.+Peter+Thelmo+Parish+Aparri+Cagayan" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 w-full py-2 bg-stone-100 hover:bg-stone-200 rounded-lg text-xs font-western text-cowboy-red transition min-h-[44px]">
+                            <i class="fas fa-location-arrow"></i> Open Google Maps
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Reception Card -->
+                <div class="bg-white p-5 rounded-2xl border-2 border-cowboy-tan shadow-md hover:shadow-xl transition flex flex-col justify-between relative">
+                    <div>
+                        <div class="absolute -top-3 left-4 bg-cowboy-tan text-white font-western text-[10px] sm:text-[11px] px-3 py-1 rounded-full uppercase shadow">
+                            Part 2: Reception
+                        </div>
+                        <div class="text-center pt-3">
+                            <div class="w-12 h-12 mx-auto rounded-full bg-red-600 text-white flex items-center justify-center text-xl mb-2 border-2 border-yellow-400">
+                                <i class="fas fa-store"></i>
+                            </div>
+                            <h3 class="font-western text-base sm:text-lg text-cowboy-brown">Jollibee - Aparri</h3>
+                            <p class="font-typewriter text-xs text-cowboy-red font-bold my-1.5"><i class="far fa-clock mr-1"></i> 3:00 PM Onwards</p>
+                            <p class="text-xs text-gray-600 font-sans leading-relaxed">Corner Maharlika Hwy & De Rivera St., Centro, Aparri</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-dashed border-gray-200 text-center">
+                        <a href="https://maps.app.goo.gl/stjZDCjPeWVgLPVF7" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 w-full py-2 bg-stone-100 hover:bg-stone-200 rounded-lg text-xs font-western text-cowboy-tan transition min-h-[44px]">
+                            <i class="fas fa-location-arrow"></i> Open Google Maps
+                        </a>
+                    </div>
+                </div>
+
+                <!-- After Party Card -->
+                <div class="bg-white p-5 rounded-2xl border-2 border-cowboy-brown shadow-md hover:shadow-xl transition flex flex-col justify-between relative">
+                    <div>
+                        <div class="absolute -top-3 left-4 bg-cowboy-brown text-white font-western text-[10px] sm:text-[11px] px-3 py-1 rounded-full uppercase shadow">
+                            Part 3: After-Party
+                        </div>
+                        <div class="text-center pt-3">
+                            <div class="w-12 h-12 mx-auto rounded-full bg-amber-50 text-cowboy-brown flex items-center justify-center text-xl mb-2">
+                                <i class="fas fa-beer-mug-empty"></i>
+                            </div>
+                            <h3 class="font-western text-base sm:text-lg text-cowboy-brown">Aquino Residence</h3>
+                            <p class="font-typewriter text-xs text-cowboy-red font-bold my-1.5"><i class="far fa-clock mr-1"></i> Right After Jollibee</p>
+                            <p class="text-xs text-gray-600 font-sans leading-relaxed">Zone 5, Macanaya, Aparri, Cagayan</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-dashed border-gray-200 text-center">
+                        <a href="https://maps.app.goo.gl/QYHi7LameSo8sKSD7" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 w-full py-2 bg-stone-100 hover:bg-stone-200 rounded-lg text-xs font-western text-cowboy-brown transition min-h-[44px]">
+                            <i class="fas fa-location-arrow"></i> Open Google Maps
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Schedule Timeline -->
+            <div class="max-w-2xl mx-auto bg-white/90 p-4 sm:p-8 rounded-2xl border border-cowboy-tan shadow-inner">
+                <h4 class="font-western text-center text-cowboy-brown text-base sm:text-lg mb-6 uppercase border-b pb-3 border-cowboy-tan/30">
+                    <i class="fas fa-list-ol text-cowboy-red mr-2"></i>Official Day Schedule
+                </h4>
+
+                <div class="space-y-4 sm:space-y-6 relative before:absolute before:inset-0 before:left-4 before:sm:left-1/2 before:-ml-px before:h-full before:w-0.5 before:bg-cowboy-tan/40">
+                    
+                    <div class="relative flex items-start sm:items-center justify-between sm:justify-normal sm:odd:flex-row-reverse group pl-8 sm:pl-0">
+                        <div class="absolute left-0 sm:static flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-cowboy-red text-white shadow shrink-0 sm:order-1 sm:group-odd:-translate-x-1/2 sm:group-even:translate-x-1/2">
+                            <i class="fas fa-church text-xs sm:text-sm"></i>
+                        </div>
+                        <div class="w-full sm:w-[calc(50%-2.5rem)] bg-white p-3 sm:p-4 rounded-xl border border-gray-200 shadow-sm">
+                            <div class="flex items-center justify-between space-x-2 mb-1">
+                                <span class="font-western text-cowboy-brown text-xs">10:00 AM</span>
+                                <span class="text-[9px] font-typewriter bg-red-50 text-cowboy-red px-2 py-0.5 rounded-full font-bold">Ceremony</span>
+                            </div>
+                            <p class="text-xs text-gray-700 leading-relaxed">Dwight's Christening at St. Peter Thelmo Parish.</p>
+                        </div>
+                    </div>
+
+                    <div class="relative flex items-start sm:items-center justify-between sm:justify-normal sm:odd:flex-row-reverse group pl-8 sm:pl-0">
+                        <div class="absolute left-0 sm:static flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-red-600 text-white shadow shrink-0 sm:order-1 sm:group-odd:-translate-x-1/2 sm:group-even:translate-x-1/2 border-2 border-yellow-300">
+                            <i class="fas fa-cake-candles text-xs sm:text-sm"></i>
+                        </div>
+                        <div class="w-full sm:w-[calc(50%-2.5rem)] bg-white p-3 sm:p-4 rounded-xl border border-gray-200 shadow-sm">
+                            <div class="flex items-center justify-between space-x-2 mb-1">
+                                <span class="font-western text-cowboy-brown text-xs">3:00 PM</span>
+                                <span class="text-[9px] font-typewriter bg-amber-50 text-cowboy-tan px-2 py-0.5 rounded-full font-bold">Reception</span>
+                            </div>
+                            <p class="text-xs text-gray-700 leading-relaxed">Food, party games & birthday fun at Jollibee – Aparri!</p>
+                        </div>
+                    </div>
+
+                    <div class="relative flex items-start sm:items-center justify-between sm:justify-normal sm:odd:flex-row-reverse group pl-8 sm:pl-0">
+                        <div class="absolute left-0 sm:static flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-cowboy-brown text-white shadow shrink-0 sm:order-1 sm:group-odd:-translate-x-1/2 sm:group-even:translate-x-1/2">
+                            <i class="fas fa-camera text-xs sm:text-sm"></i>
+                        </div>
+                        <div class="w-full sm:w-[calc(50%-2.5rem)] bg-white p-3 sm:p-4 rounded-xl border border-gray-200 shadow-sm">
+                            <div class="flex items-center justify-between space-x-2 mb-1">
+                                <span class="font-western text-cowboy-brown text-xs">4:00 PM</span>
+                                <span class="text-[9px] font-typewriter bg-stone-100 text-cowboy-brown px-2 py-0.5 rounded-full font-bold">Photos & Souvenirs</span>
+                            </div>
+                            <p class="text-xs text-gray-700 leading-relaxed">Souvenir distribution and photo ops with our little cowboy, Dwight Onyx!</p>
+                        </div>
+                    </div>
+
+                    <div class="relative flex items-start sm:items-center justify-between sm:justify-normal sm:odd:flex-row-reverse group pl-8 sm:pl-0">
+                        <div class="absolute left-0 sm:static flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-cowboy-red text-white shadow shrink-0 sm:order-1 sm:group-odd:-translate-x-1/2 sm:group-even:translate-x-1/2">
+                            <i class="fas fa-glass-cheers text-xs sm:text-sm"></i>
+                        </div>
+                        <div class="w-full sm:w-[calc(50%-2.5rem)] bg-white p-3 sm:p-4 rounded-xl border border-gray-200 shadow-sm">
+                            <div class="flex items-center justify-between space-x-2 mb-1">
+                                <span class="font-western text-cowboy-brown text-xs">5:00 PM</span>
+                                <span class="text-[9px] font-typewriter bg-red-50 text-cowboy-red px-2 py-0.5 rounded-full font-bold">The Celebration Continues</span>
+                            </div>
+                            <p class="text-xs text-gray-700 leading-relaxed">The party doesn't end here—let's keep celebrating at Aquino Residence!</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- THE WESTERN FIT CHECK -->
+        <section class="px-3 sm:px-6 py-8 sm:py-12 bg-cowboy-darkparchment/80">
+            <div class="text-center mb-6">
+                <h2 class="font-western text-2xl sm:text-4xl text-cowboy-red uppercase">
+                    <i class="fas fa-shirt text-cowboy-tan mr-2"></i>THE WESTERN FIT CHECK
+                </h2>
+                <div class="bg-white/80 p-4 rounded-xl border border-cowboy-tan max-w-xl mx-auto my-3 shadow-sm">
+                    <p class="font-western text-xs text-cowboy-red uppercase tracking-wider mb-1">Modern Western & Country Casual 🌵</p>
+                    <p class="font-typewriter text-xs text-cowboy-brown leading-relaxed">
+                       Think denim, plaid, boots, and earthy tones! Come in your favorite Western-inspired outfit. Cowboy hats, boots, bandanas, and cute accessories? Even better. Have fun with it!
+                    </p>
+                </div>
+            </div>
+
+            <div class="max-w-xl mx-auto mb-4">
+                <p class="text-center font-western text-[11px] sm:text-xs text-cowboy-brown uppercase mb-3 tracking-wider">
+                    The Color Lineup · Tap for Outfit Inspo
+                </p>
+
+                <div class="grid grid-cols-5 gap-2 sm:gap-4 px-1">
+                    <button onclick="showPaletteTip('Deep Red', 'Red plaid? A cute red top? A little pop of red? We love it! ❤️')" class="group flex flex-col items-center focus:outline-none min-h-[44px]">
+                        <div class="w-10 h-10 sm:w-16 sm:h-16 rounded-full bg-[#8A1C1C] border-2 border-white shadow-md active:scale-95 transition flex items-center justify-center text-white">
+                            <i class="fas fa-check opacity-0 group-hover:opacity-100 transition text-xs sm:text-base"></i>
+                        </div>
+                        <span class="text-[9px] sm:text-xs font-western text-cowboy-brown mt-1.5">Deep Red</span>
+                    </button>
+
+                    <button onclick="showPaletteTip('Caramel Tan', 'Beige fits, tan dresses, or caramel accessories. Giving that Western aesthetic! 🤎')" class="group flex flex-col items-center focus:outline-none min-h-[44px]">
+                        <div class="w-10 h-10 sm:w-16 sm:h-16 rounded-full bg-[#C68B59] border-2 border-white shadow-md active:scale-95 transition flex items-center justify-center text-white">
+                            <i class="fas fa-check opacity-0 group-hover:opacity-100 transition text-xs sm:text-base"></i>
+                        </div>
+                        <span class="text-[9px] sm:text-xs font-western text-cowboy-brown mt-1.5">Caramel</span>
+                    </button>
+
+                    <button onclick="showPaletteTip('Chocolate Brown', 'Brown fits, boots, belts, or a cute monochrome look. So good! 🤎')" class="group flex flex-col items-center focus:outline-none min-h-[44px]">
+                        <div class="w-10 h-10 sm:w-16 sm:h-16 rounded-full bg-[#3E2723] border-2 border-white shadow-md active:scale-95 transition flex items-center justify-center text-white">
+                            <i class="fas fa-check opacity-0 group-hover:opacity-100 transition text-xs sm:text-base"></i>
+                        </div>
+                        <span class="text-[9px] sm:text-xs font-western text-cowboy-brown mt-1.5">Brown</span>
+                    </button>
+
+                    <button onclick="showPaletteTip('Denim Blue', 'Denim on denim? Jeans, skirts, or a cute chambray top. Always a yes! 👖')" class="group flex flex-col items-center focus:outline-none min-h-[44px]">
+                        <div class="w-10 h-10 sm:w-16 sm:h-16 rounded-full bg-[#2C4D6F] border-2 border-white shadow-md active:scale-95 transition flex items-center justify-center text-white">
+                            <i class="fas fa-check opacity-0 group-hover:opacity-100 transition text-xs sm:text-base"></i>
+                        </div>
+                        <span class="text-[9px] sm:text-xs font-western text-cowboy-brown mt-1.5">Denim</span>
+                    </button>
+
+                    <button onclick="showPaletteTip('Parchment Cream', 'Cream dresses, white tops, linen sets. Clean, cute, and effortlessly chic! 🤍')" class="group flex flex-col items-center focus:outline-none min-h-[44px]">
+                        <div class="w-10 h-10 sm:w-16 sm:h-16 rounded-full bg-[#FDFBF7] border-2 border-cowboy-brown shadow-md active:scale-95 transition flex items-center justify-center text-cowboy-brown">
+                            <i class="fas fa-check opacity-0 group-hover:opacity-100 transition text-xs sm:text-base"></i>
+                        </div>
+                        <span class="text-[9px] sm:text-xs font-western text-cowboy-brown mt-1.5">Cream</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="palette-tip-box" class="max-w-md mx-auto bg-white p-3 rounded-xl border border-cowboy-tan text-center font-typewriter text-xs text-cowboy-brown shadow-sm hidden">
+                <span id="palette-tip-text">Select a color above to reveal styling tips.</span>
+            </div>
+        </section>
+
+        <!-- PHOTO GALLERY SECTION -->
+        <section class="px-3 sm:px-6 py-8 sm:py-12">
+            <div class="text-center mb-6">
+                <h2 class="font-western text-2xl sm:text-4xl text-cowboy-brown uppercase">
+                    <i class="fas fa-camera-retro text-cowboy-red mr-2"></i>Little Cowboy Gallery
+                </h2>
+                <p class="font-typewriter text-xs sm:text-sm text-cowboy-brown/80">Snapshots of Dwight Onyx's first year on the ranch!</p>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto">
+                <div class="polaroid transform -rotate-1 sm:-rotate-2 cursor-pointer" onclick="openLightbox('photo1.jpg', 'New to the Ranch 🤠')">
+                    <img src="photo1.jpg" alt="Dwight Onyx smile" class="w-full h-32 sm:h-44 object-cover rounded-sm mb-2" loading="lazy">
+                    <p class="font-western text-[10px] sm:text-[11px] text-center text-cowboy-brown">New to the Ranch 🤠</p>
+                </div>
+                <div class="polaroid transform rotate-1 cursor-pointer" onclick="openLightbox('photo2.jpg', 'Little Buckaroo 👢')">
+                    <img src="photo2.jpg" alt="Cowboy boots" class="w-full h-32 sm:h-44 object-cover rounded-sm mb-2" loading="lazy">
+                    <p class="font-western text-[10px] sm:text-[11px] text-center text-cowboy-brown">Little Buckaroo</p>
+                </div>
+                <div class="polaroid transform -rotate-1 cursor-pointer" onclick="openLightbox('photo3.jpg', 'Happy Trails 🌾')">
+                    <img src="photo3.jpg" alt="Ranch life" class="w-full h-32 sm:h-44 object-cover rounded-sm mb-2" loading="lazy">
+                    <p class="font-western text-[10px] sm:text-[11px] text-center text-cowboy-brown">Happy Trails</p>
+                </div>
+                <div class="polaroid transform rotate-1 sm:rotate-2 cursor-pointer" onclick="openLightbox('photo4.jpg', 'Turning One Year Old! 🎂')">
+                    <img src="photo4.jpg" alt="Turning One" class="w-full h-32 sm:h-44 object-cover rounded-sm mb-2" loading="lazy">
+                    <p class="font-western text-[10px] sm:text-[11px] text-center text-cowboy-brown">The Big One! 🎂</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- GIFT REGISTRY SECTION -->
+        <section class="px-3 sm:px-6 py-8 sm:py-10 bg-cowboy-darkparchment/60 border-t-2 border-cowboy-tan/40">
+            <div class="max-w-2xl mx-auto text-center">
+                <h2 class="font-western text-2xl sm:text-3xl text-cowboy-brown uppercase mb-2">
+                    <i class="fas fa-gift text-cowboy-red mr-2"></i>GIFT IDEAS
+                </h2>
+                <p class="font-typewriter text-xs sm:text-sm text-cowboy-brown/80 mb-6 leading-relaxed">
+                    Your presence and prayers are the greatest gift! If you wish to bring a present for Dwight, here are a few ideas he would love:
+                </p>
+
+                <div class="grid sm:grid-cols-2 gap-3 sm:gap-4 text-left">
+                    <div class="bg-white p-4 sm:p-5 rounded-xl border border-cowboy-tan shadow-sm">
+                        <div class="flex items-center gap-3 mb-2 text-cowboy-red">
+                            <i class="fas fa-baby text-lg sm:text-xl"></i>
+                            <h3 class="font-western text-xs sm:text-sm text-cowboy-brown">Baby Essentials</h3>
+                        </div>
+                        <ul class="text-xs text-gray-600 font-sans space-y-1.5 list-disc list-inside">
+                            <li>Baby Wipes & Baby Moisturizer</li>
+                            <li>MamyPoko Diaper (XL)</li>
+                            <li>Baby Feeding Bottle</li>
+                            <li>Tenderoo Baby Wash and Shampoo</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-white p-4 sm:p-5 rounded-xl border border-cowboy-tan shadow-sm">
+                        <div class="flex items-center gap-3 mb-2 text-cowboy-gold">
+                            <i class="fas fa-cubes text-lg sm:text-xl"></i>
+                            <h3 class="font-western text-xs sm:text-sm text-cowboy-brown">Educational Toys & Books</h3>
+                        </div>
+                        <ul class="text-xs text-gray-600 font-sans space-y-1.5 list-disc list-inside">
+                            <li>Busy Books</li>
+                            <li>Matching Toys</li>
+                            <li>Building Blocks</li>
+                            <li>Stacking Toys</li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="text-[10px] sm:text-[11px] font-typewriter text-stone-500 mt-4 italic">* Just a few ideas in case you're wondering what to bring.</p>
+            </div>
+        </section>
+
+        <!-- RSVP FORM SECTION -->
+        <section id="rsvp" class="px-3 sm:px-6 py-8 sm:py-12 bg-cowboy-darkparchment border-t-4 border-cowboy-brown">
+            <div class="max-w-xl mx-auto wood-card p-5 sm:p-8 rounded-2xl text-white shadow-2xl relative">
+                <div class="text-center mb-6">
+                    <i class="fas fa-star text-cowboy-gold text-xl sm:text-2xl"></i>
+                    <h2 class="font-western text-xl sm:text-3xl text-yellow-100 uppercase mt-1">Saddle Up & RSVP</h2>
+                    <p class="font-typewriter text-xs text-gray-300 mt-1">Please confirm your attendance by November 15, 2026</p>
+                </div>
+
+                <form id="rsvp-form" onsubmit="handleRSVP(event)" class="space-y-4">
+                    <div>
+                        <label for="guest-name" class="block font-western text-xs text-cowboy-gold uppercase mb-1">Guest Name(s)</label>
+                        <input type="text" id="guest-name" required placeholder="e.g., Alan Jackson" class="w-full px-4 py-3 rounded-lg bg-cowboy-brown border-2 border-cowboy-tan text-white placeholder-gray-400 font-sans text-sm focus:outline-none focus:border-cowboy-gold min-h-[44px]">
+                    </div>
+
+                    <div>
+                        <label for="guest-count" class="block font-western text-xs text-cowboy-gold uppercase mb-1">Total Attendees</label>
+                        <select id="guest-count" class="w-full px-4 py-3 rounded-lg bg-cowboy-brown border-2 border-cowboy-tan text-white font-sans text-sm focus:outline-none focus:border-cowboy-gold min-h-[44px]">
+                            <option value="1">1 Guest</option>
+                            <option value="2">2 Guests</option>
+                            <option value="3">3 Guests</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <span class="block font-western text-xs text-cowboy-gold uppercase mb-1">Attendance Confirmation</span>
+                        <div class="grid grid-cols-2 gap-2 sm:gap-3 mt-1">
+                            <label class="flex items-center justify-center gap-1.5 p-3 rounded-lg bg-cowboy-brown border-2 border-cowboy-tan cursor-pointer hover:border-cowboy-gold transition min-h-[44px]">
+                                <input type="radio" name="attendance" value="Yes" checked class="text-cowboy-red">
+                                <span class="font-western text-[11px] sm:text-xs text-yellow-100">Yee-haw! Count me in!</span>
+                            </label>
+                            <label class="flex items-center justify-center gap-1.5 p-3 rounded-lg bg-cowboy-brown border-2 border-cowboy-tan cursor-pointer hover:border-cowboy-gold transition min-h-[44px]">
+                                <input type="radio" name="attendance" value="No" class="text-cowboy-red">
+                                <span class="font-western text-[11px] sm:text-xs text-gray-300">Sorry, can't make it.</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="guest-wishes" class="block font-western text-xs text-cowboy-gold uppercase mb-1">Message for Dwight Onyx</label>
+                        <textarea id="guest-wishes" rows="3" placeholder="Write your birthday wish or blessing..." class="w-full px-4 py-2.5 rounded-lg bg-cowboy-brown border-2 border-cowboy-tan text-white placeholder-gray-400 font-sans text-sm focus:outline-none focus:border-cowboy-gold"></textarea>
+                    </div>
+
+                    <button type="submit" id="rsvp-submit-btn" class="w-full py-3.5 bg-cowboy-red hover:bg-cowboy-darkred active:scale-98 text-white font-western uppercase rounded-lg border-2 border-cowboy-gold shadow-lg transition text-xs sm:text-sm min-h-[48px]">
+                        <i class="fas fa-paper-plane mr-2"></i> Submit RSVP Response
+                    </button>
+                </form>
+
+                <!-- Success Confirmation Box -->
+                <div id="rsvp-success" class="hidden text-center py-6 sm:py-8 space-y-3">
+                    <i class="fas fa-hat-cowboy text-4xl sm:text-5xl text-cowboy-gold animate-bounce"></i>
+                    <h3 class="font-western text-xl sm:text-2xl text-yellow-100">RSVP Submitted!</h3>
+                    <p class="font-typewriter text-xs text-gray-300">Thank you, <span id="confirmed-name" class="font-bold text-cowboy-gold"></span>! Your response has been recorded. We can't wait to celebrate with you!</p>
+                    <button onclick="resetRSVP()" class="text-xs font-western text-cowboy-gold underline hover:text-white mt-2 block mx-auto min-h-[44px] flex items-center justify-center">Submit another response</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER SECTION -->
+        <footer class="bg-cowboy-brown text-center py-8 sm:py-10 px-4 text-xs font-typewriter text-gray-300 border-t-4 border-cowboy-gold">
+            <div class="max-w-xl mx-auto space-y-3">
+                <i class="fas fa-star text-cowboy-gold text-xl sm:text-2xl"></i>
+                <h3 class="font-western text-lg sm:text-xl text-yellow-100 uppercase">Thank You for Being Part of Our Special Day!</h3>
+                <p class="text-gray-300 leading-relaxed font-sans text-xs">
+                    Your presence, love, and blessings will make this celebration even more memorable. We can't wait to celebrate with you!
+                </p>
+                <div class="pt-4 border-t border-cowboy-lightbrown text-[10px] sm:text-[11px] text-gray-400">
+                    <p class="font-western text-cowboy-gold text-xs mb-1">Dwight Onyx's 1st Birthday & Christening Rodeo</p>
+                    <p>November 21, 2026 • Aparri, Cagayan</p>
+                </div>
+            </div>
+        </footer>
+
+        <div class="h-3 sm:h-4 bandana-border-top w-full"></div>
+    </div>
+
+    <!-- LIGHTBOX MODAL -->
+    <div id="lightbox-modal" class="fixed inset-0 z-50 bg-black/85 hidden items-center justify-center p-4 backdrop-blur-sm" onclick="closeLightbox()">
+        <div class="max-w-lg w-full bg-white p-3 sm:p-4 rounded-xl relative shadow-2xl" onclick="event.stopPropagation()">
+            <button onclick="closeLightbox()" class="absolute -top-3 -right-3 bg-cowboy-red text-white w-9 h-9 rounded-full flex items-center justify-center font-bold shadow-md focus:outline-none min-w-[36px] min-h-[36px]" aria-label="Close preview">✕</button>
+            <img id="lightbox-img" src="" alt="Gallery Preview" class="w-full h-64 sm:h-80 object-cover rounded-lg">
+            <p id="lightbox-caption" class="font-western text-center text-cowboy-brown text-xs sm:text-sm mt-3"></p>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxscDCVCReIJW9DHRx8aOrlAPv496aVAfhg95l5xav5OkAzdC1WONv5EriQMfM_brmntw/exec"; 
+
+        const audioEl = document.getElementById('bg-audio');
+        const audioIcon = document.getElementById('audio-icon');
+        let isPlaying = false;
+
+        function openEnvelope() {
+            const overlay = document.getElementById('envelope-overlay');
+            const card = document.getElementById('envelope-card');
+            
+            card.classList.add('scale-95', 'opacity-0');
+            overlay.classList.add('opacity-0', 'pointer-events-none');
+            
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 700);
+
+            audioEl.play().then(() => {
+                audioIcon.className = "fas fa-volume-high text-lg sm:text-2xl animate-pulse";
+                isPlaying = true;
+            }).catch(e => console.log("Audio autoplay prevented:", e));
+
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 50,
+                    spread: 60,
+                    origin: { y: 0.6 },
+                    colors: ['#8A1C1C', '#C68B59', '#D4AF37']
+                });
+            }
+        }
+
+        const eventDate = new Date("November 21, 2026 10:00:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+
+            if (distance < 0) {
+                document.getElementById("days").innerText = "00";
+                document.getElementById("hours").innerText = "00";
+                document.getElementById("minutes").innerText = "00";
+                document.getElementById("seconds").innerText = "00";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = String(days).padStart(2, '0');
+            document.getElementById("hours").innerText = String(hours).padStart(2, '0');
+            document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
+            document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        const audioBtn = document.getElementById('audio-toggle-btn');
+
+        audioBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                audioEl.pause();
+                audioIcon.className = "fas fa-music text-lg sm:text-2xl";
+                isPlaying = false;
+            } else {
+                audioEl.play().catch(e => console.log("Audio play blocked by browser:", e));
+                audioIcon.className = "fas fa-volume-high text-lg sm:text-2xl animate-pulse";
+                isPlaying = true;
+            }
+        });
+
+        function showPaletteTip(colorName, tipDescription) {
+            const tipBox = document.getElementById('palette-tip-box');
+            const tipText = document.getElementById('palette-tip-text');
+            tipText.innerHTML = `<strong>${escapeHTML(colorName)}:</strong> ${escapeHTML(tipDescription)}`;
+            tipBox.classList.remove('hidden');
+        }
+
+        function handleRSVP(event) {
+            event.preventDefault();
+
+            const nameInput = document.getElementById('guest-name').value.trim();
+            const countInput = document.getElementById('guest-count').value;
+            const attendanceInput = document.querySelector('input[name="attendance"]:checked').value;
+            const wishesInput = document.getElementById('guest-wishes').value.trim();
+
+            if (!nameInput) return;
+
+            const submitBtn = document.getElementById('rsvp-submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Submitting...';
+
+            const payload = {
+                name: nameInput,
+                count: countInput,
+                attendance: attendanceInput,
+                wishes: wishesInput,
+                timestamp: new Date().toISOString()
+            };
+
+            if (GOOGLE_APPS_SCRIPT_URL) {
+                fetch(GOOGLE_APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                }).catch(err => console.error("API error:", err));
+            }
+
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 90,
+                    spread: 70,
+                    origin: { y: 0.7 },
+                    colors: ['#8A1C1C', '#C68B59', '#D4AF37', '#3E2723']
+                });
+            }
+
+            document.getElementById('confirmed-name').textContent = nameInput;
+            document.getElementById('rsvp-form').classList.add('hidden');
+            document.getElementById('rsvp-success').classList.remove('hidden');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane mr-2"></i> Submit RSVP Response';
+        }
+
+        function resetRSVP() {
+            document.getElementById('rsvp-form').reset();
+            document.getElementById('rsvp-form').classList.remove('hidden');
+            document.getElementById('rsvp-success').classList.add('hidden');
+        }
+
+        function openLightbox(imgUrl, captionText) {
+            const modal = document.getElementById('lightbox-modal');
+            const img = document.getElementById('lightbox-img');
+            const caption = document.getElementById('lightbox-caption');
+
+            img.src = imgUrl;
+            caption.textContent = captionText;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeLightbox() {
+            const modal = document.getElementById('lightbox-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+    </script>
+</body>
+</html>
